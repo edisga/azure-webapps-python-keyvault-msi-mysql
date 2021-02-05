@@ -2,9 +2,7 @@ from flask import Flask, jsonify
 import mysql.connector
 from mysql.connector import errorcode
 
-from msrestazure.azure_active_directory import MSIAuthentication
-
-#from azure.identity import DefaultAzureCredential
+from azure.identity import ManagedIdentityCredential
 from azure.keyvault.secrets import SecretClient
 import sys, os
 
@@ -21,7 +19,7 @@ vault_name = os.environ.get('VAULT_NAME')
 
 def Connect():
     try:
-        credentials = MSIAuthentication()
+        credential = ManagedIdentityCredential(client_id="2bda2c96-8457-44ca-94ad-bbc3e34cdbf6")
         vault_url = "https://{}.vault.azure.net".format(vault_name)
         secret_client = SecretClient(vault_url=vault_url, credential=credential)
         retrieved_secret = secret_client.get_secret("mysql")
