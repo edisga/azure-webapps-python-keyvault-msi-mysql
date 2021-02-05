@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 import mysql.connector
 from mysql.connector import errorcode
 
-from azure.identity import ManagedIdentityCredential
+from azure.identity import DefaultAzureCredential
 from azure.keyvault.secrets import SecretClient
 import sys, os
 
@@ -19,7 +19,7 @@ vault_name = os.environ.get('VAULT_NAME')
 
 def Connect():
     try:
-        credential = ManagedIdentityCredential()
+        credential = DefaultAzureCredential()
         scope = 'https://vault.azure.net/.default'
         access_token = credential.get_token(scope)
         print(access_token)
